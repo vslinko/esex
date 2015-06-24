@@ -1,4 +1,4 @@
-import {DefinePlugin, optimize} from 'webpack'
+import {DefinePlugin, ProvidePlugin, optimize} from 'webpack'
 
 import {useIf, prepareArray} from '../utilities'
 import config from '../config'
@@ -21,6 +21,10 @@ export default {
   plugins: prepareArray([
     new DefinePlugin({
       'process.env.NODE_ENV': JSON.stringify(process.env.NODE_ENV || 'development')
+    }),
+
+    new ProvidePlugin({
+      'React': 'react'
     }),
 
     useIf(config.production, new optimize.UglifyJsPlugin())

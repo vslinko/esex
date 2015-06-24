@@ -33,12 +33,18 @@
     "clean": "gulp clean"
   },
   "config": {},
-  "dependencies": {},
+  "dependencies": {
+    "express": "4.13.0",
+    "morgan": "1.6.0",
+    "react": "0.13.3",
+    "source-map-support": "0.3.1"
+  },
   "devDependencies": {
     "babel": "5.6.5",
     "babel-core": "5.6.5",
     "babel-eslint": "3.1.18",
     "babel-loader": "5.1.4",
+    "babel-runtime": "5.6.5",
     "del": "1.2.0",
     "eslint": "0.23.0",
     "eslint-plugin-babel": "1.0.0",

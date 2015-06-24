@@ -1,1 +1,2 @@
-console.log('Hello Backend!')
+import './polyfills'
+export default from './di/app'

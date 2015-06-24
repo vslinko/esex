@@ -29,7 +29,12 @@
   "scripts": {},
   "config": {},
   "dependencies": {},
-  "devDependencies": {},
+  "devDependencies": {
+    "babel-eslint": "3.1.18",
+    "eslint": "0.23.0",
+    "eslint-plugin-babel": "1.0.0",
+    "eslint-plugin-react": "2.5.2"
+  },
   "peerDependencies": {},
   "bundledDependencies": [],
   "optionalDependencies": {},

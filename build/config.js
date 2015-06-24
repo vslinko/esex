@@ -15,6 +15,20 @@ const nodeModulesExternals = fs.readdirSync(path.join(rootDirectory, 'node_modul
   .filter(dir => dir !== '.bin')
   .reduce((acc, name) => (acc[name] = `commonjs ${name}`, acc), {})
 
+{
+  const envScript = path.join(rootDirectory, 'env.sh')
+
+  if (fs.existsSync(envScript)) {
+    fs.readFileSync(envScript)
+      .toString()
+      .split('\n')
+      .filter(line => /^export /.test(line))
+      .map(line => line.split('='))
+      .map(parts => [parts[0].split(' ').pop(), parts[1]])
+      .forEach(([key, value]) => process.env[key] = value)
+  }
+}
+
 export default {
   rootDirectory,
   sourceDirectory,

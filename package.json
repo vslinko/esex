@@ -33,12 +33,14 @@
     "lint": "gulp lint",
     "start": "gulp start",
     "watch-frontend": "gulp watch-frontend",
+    "watch-migrate": "gulp watch-migrate",
     "watch-webserver": "gulp watch-webserver"
   },
   "config": {},
   "dependencies": {
     "express": "4.13.0",
     "morgan": "1.6.0",
+    "oriento": "1.2.0",
     "react": "0.13.3",
     "react-observable": "1.1.3",
     "redux": "0.12.0",

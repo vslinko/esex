@@ -1,0 +1,26 @@
+#!/bin/bash
+
+name="$1"
+
+if [ "x$name" == "x" ]; then
+  echo "Usage: $0 MIGRATION_NAME"
+  exit 1
+fi
+
+cd "$(dirname $0)/.."
+
+mkdir -p src/migrations
+
+file_name="m$(date "+%Y%m%d")_$(date "+%H%M%S")_${name}.js"
+
+echo $file_name
+
+cat << END > "src/migrations/$file_name"
+export async function up(db) {
+
+}
+
+export async function down(db) {
+
+}
+END

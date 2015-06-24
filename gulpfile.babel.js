@@ -1,5 +1,7 @@
 import gulp from 'gulp'
 import webpack from 'webpack'
+import nodemon from 'nodemon'
+import path from 'path'
 
 import loadGulpPlugins from 'gulp-load-plugins'
 import runSequence from 'run-sequence'
@@ -50,6 +52,35 @@ gulp.task('build', callback => {
     callback
   )
 })
+
+/* START */
+
+gulp.task('_start-run-webserver', callback => {
+  let first = true
+
+  nodemon({
+    script: path.join(config.destinationDirectory, 'webserver'),
+    execMap: {
+      '': 'node'
+    },
+    env: {
+      PUBLIC_DIR: config.destinationPublicDirectory
+    }
+  }).on('start', function() {
+    if (first) {
+      first = false
+      callback()
+    }
+  })
+})
+
+gulp.task('start', callback =>
+  runSequence(
+    'build',
+    '_start-run-webserver',
+    callback
+  )
+)
 
 /* ESLINT */
 

@@ -1,0 +1,42 @@
+{
+  "name": "esex",
+  "version": "1.0.0",
+  "description": "Full-stack Universal JavaScript Framework",
+  "keywords": [
+    "full-stack",
+    "universal",
+    "isomorphic",
+    "framework"
+  ],
+  "homepage": "https://github.com/esex/esex",
+  "bugs": {
+    "url": "https://github.com/esex/esex/issues",
+    "email": "vslinko@yahoo.com"
+  },
+  "license": "MIT",
+  "author": {
+    "name": "Vyacheslav Slinko",
+    "email": "vslinko@yahoo.com",
+    "url": "https://twitter.com/vslinko"
+  },
+  "contributors": [],
+  "main": "dist",
+  "bin": {},
+  "repository": {
+    "type": "git",
+    "url": "esex/esex"
+  },
+  "scripts": {},
+  "config": {},
+  "dependencies": {},
+  "devDependencies": {},
+  "peerDependencies": {},
+  "bundledDependencies": [],
+  "optionalDependencies": {},
+  "engines": {},
+  "os": [],
+  "cpu": [],
+  "preferGlobal": false,
+  "private": true,
+  "publishConfig": {}
+}

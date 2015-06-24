@@ -1,4 +1,4 @@
-export default function appTemplate(title, content) {
+export default function appTemplate(title, content, state) {
   return `
     <!DOCTYPE html>
     <html>
@@ -10,8 +10,11 @@ export default function appTemplate(title, content) {
         <script src="/frontend.js"></script>
         <script>
           document.addEventListener('DOMContentLoaded', function() {
+            var state = ${JSON.stringify(state)}
+
             frontend.bootstrapApplication(
-              document.getElementById('application')
+              document.getElementById('application'),
+              state
             )
           })
         </script>

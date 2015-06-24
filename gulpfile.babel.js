@@ -1,5 +1,6 @@
 import gulp from 'gulp'
 import webpack from 'webpack'
+import WebpackDevServer from 'webpack-dev-server'
 import nodemon from 'nodemon'
 import path from 'path'
 
@@ -81,6 +82,63 @@ gulp.task('start', callback =>
     callback
   )
 )
+
+/* WATCH */
+
+gulp.task('_watch-copy-public-files', ['_build-copy-public-files'], () =>
+  gulp.watch(`${config.publicDirectory}/**/*`, ['_build-copy-public-files'])
+)
+
+gulp.task('_watch-compile-webserver', callback =>
+  webpack(webpackWebserverConfig())
+    .watch(100, webpackCallback({
+      onReady: callback,
+      onChange: () => {
+        nodemon.restart()
+      }
+    }))
+)
+
+gulp.task('_watch-webpack-dev-server', callback => {
+  const config = webpackFrontendConfig()
+
+  const server = new WebpackDevServer(
+    webpack(config),
+    config.devServer
+  )
+
+  server.listen(3000, '0.0.0.0', callback)
+})
+
+gulp.task('watch-webserver', callback =>
+  runSequence(
+    '_build-clean',
+    [
+      '_watch-copy-public-files',
+      '_build-compile-frontend',
+      '_watch-compile-webserver'
+    ],
+    '_start-run-webserver',
+    callback
+  )
+)
+
+gulp.task('watch-frontend', callback => {
+  process.env.PORT = 3001
+  process.env.HOT_RELOAD = 'react-hot-loader'
+  config.hotReload = true
+
+  runSequence(
+    '_build-clean',
+    [
+      '_watch-copy-public-files',
+      '_build-compile-webserver'
+    ],
+    '_start-run-webserver',
+    '_watch-webpack-dev-server',
+    callback
+  )
+})
 
 /* ESLINT */
 

@@ -1,3 +1,5 @@
+import createObservableComponent from 'react-observable'
+
 function Application() {
   return (
     <div>
@@ -6,4 +8,4 @@ function Application() {
   )
 }
 
-export default Application
+export default createObservableComponent(Application)

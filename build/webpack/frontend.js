@@ -19,6 +19,19 @@ export default mergeObjects(base, {
     library: 'frontend'
   },
 
+  module: mergeObjects(base.module, {
+    loaders: mergeArrays(
+      [
+        {
+          test: /\.js$/,
+          include: [config.sourceDirectory],
+          loaders: ['react-hot-loader']
+        }
+      ],
+      base.module.loaders
+    )
+  }),
+
   plugins: mergeArrays(
     prepareArray([
       useIf(config.hotReload, new HotModuleReplacementPlugin())

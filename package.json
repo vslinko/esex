@@ -42,6 +42,8 @@
     "bcryptjs": "2.1.0",
     "body-parser": "1.13.1",
     "express": "4.13.0",
+    "html5-history-api": "4.2.1",
+    "match-route-pattern": "1.2.4",
     "morgan": "1.6.0",
     "oriento": "1.2.0",
     "ramda": "0.15.1",

@@ -1,3 +1,5 @@
+import {ParametersError} from '../db/errors'
+
 function getErrorMetaInformation(error) {
   const errorMeta = {
     status: 500,
@@ -5,11 +7,40 @@ function getErrorMetaInformation(error) {
     detail: error.stack
   }
 
+  if (error instanceof ParametersError) {
+    errorMeta.status = 400
+  }
+
+  if (error.type === 'com.orientechnologies.orient.core.storage.ORecordDuplicatedException') {
+    const matches = /key \'(.*)\' in index \'(.*)\' previously/.exec(error.message)
+
+    if (matches) {
+      const value = matches[1]
+      const dbIndex = matches[2].split('.')
+      const className = dbIndex[0]
+      const fields = dbIndex[1].split('_')
+
+      delete errorMeta.detail
+
+      errorMeta.status = 409
+      errorMeta.title = `Found duplicated key "${value}" in index "${matches[2]}"`
+      errorMeta.meta = {value, dbIndex, className, fields}
+
+      if (fields.length === 1) {
+        errorMeta.source = {
+          pointer: `/data/attributes/${fields[0]}`
+        }
+      }
+    }
+  }
+
   return errorMeta
 }
 
 export default function wrapHandler(handler) {
   return async (request, response) => {
+    const isApiRequest = /^\/api\//.test(request.originalUrl)
+
     let contentType
     let status = 200
     let body
@@ -33,8 +64,16 @@ export default function wrapHandler(handler) {
 
       status = errorMeta.status
 
-      contentType = 'text/plain'
-      body = errorMeta.detail || errorMeta.title
+      if (isApiRequest) {
+        body = {errors: [errorMeta]}
+      } else {
+        contentType = 'text/plain'
+        body = errorMeta.detail || errorMeta.title
+      }
+    }
+
+    if (!contentType && isApiRequest) {
+      contentType = 'application/vnd.api+json'
     }
 
     if (contentType) {

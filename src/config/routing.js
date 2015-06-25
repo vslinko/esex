@@ -3,5 +3,6 @@ export const error = {component: 'ErrorPage', transition: 'error'}
 
 export default [
   {route: '/', component: 'HomePage', transition: 'home'},
-  {route: '/about', component: 'AboutPage', transition: 'about'}
+  {route: '/about', component: 'AboutPage', transition: 'about'},
+  {route: '/users', component: 'UsersPage', transition: 'users'}
 ]

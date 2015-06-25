@@ -1,4 +1,4 @@
-import {HotModuleReplacementPlugin} from 'webpack'
+import {DefinePlugin, HotModuleReplacementPlugin} from 'webpack'
 import path from 'path'
 
 import {useIf, prepareArray, mergeArrays, mergeObjects} from '../utilities'
@@ -34,6 +34,9 @@ export default mergeObjects(base, {
 
   plugins: mergeArrays(
     prepareArray([
+      new DefinePlugin({
+        'process.env.BACKEND_ADDRESS': JSON.stringify(process.env.BACKEND_ADDRESS || '')
+      }),
       useIf(config.hotReload, new HotModuleReplacementPlugin())
     ]),
     base.plugins

@@ -18,6 +18,9 @@ function DumbHomePage({dispatcher, currentUser, onCurrentUserChange}) {
       <div>
         <Link dispatcher={dispatcher} href="/about">About</Link>
       </div>
+      <div>
+        <Link dispatcher={dispatcher} href="/users">Users</Link>
+      </div>
     </div>
   )
 }

@@ -1,3 +1,5 @@
+import * as api from '../../api'
+import createFetchTransition from './createFetchTransition'
 import createStaticTransition from './createStaticTransition'
 
 export const home = createStaticTransition({
@@ -6,6 +8,11 @@ export const home = createStaticTransition({
 
 export const about = createStaticTransition({
   title: 'About'
+})
+
+export const users = createFetchTransition({
+  title: 'Users',
+  apiRequest: api.usersPageApiRequest
 })
 
 export const notFound = createStaticTransition({

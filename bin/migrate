@@ -2,14 +2,9 @@
 
 cd "$(dirname $0)/.."
 
-if [ ! -x env.sh ]; then
-  cat << END > env.sh
-# Define your environment variables here
+. ./bin/_lib.sh
 
-\$*
-END
-  chmod a+x env.sh
-fi
+ensure_env_sh
 
 ./node_modules/.bin/gulp _build-compile-migrate >/dev/null
 ./env.sh node ./.app/migrate.js

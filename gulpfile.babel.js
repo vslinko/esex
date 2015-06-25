@@ -14,6 +14,7 @@ import config from './build/config'
 const webpackFrontendConfig = () => require('./build/webpack/frontend')
 const webpackWebserverConfig = () => require('./build/webpack/webserver')
 const webpackMigrateConfig = () => require('./build/webpack/migrate')
+const webpackFixturesConfig = () => require('./build/webpack/fixtures')
 const plugins = loadGulpPlugins()
 
 /* BUILD */
@@ -47,6 +48,11 @@ gulp.task('_build-compile-migrate', callback => {
     .run(webpackCallback({onReady: callback}))
 })
 
+gulp.task('_build-compile-fixtures', callback => {
+  webpack(webpackFixturesConfig())
+    .run(webpackCallback({onReady: callback}))
+})
+
 gulp.task('build', callback => {
   runSequence(
     '_build-clean',
@@ -55,7 +61,8 @@ gulp.task('build', callback => {
       '_build-copy-public-files',
       '_build-compile-frontend',
       '_build-compile-webserver',
-      '_build-compile-migrate'
+      '_build-compile-migrate',
+      '_build-compile-fixtures'
     ],
     callback
   )
@@ -113,6 +120,13 @@ gulp.task('_watch-compile-migrate', callback =>
     }))
 )
 
+gulp.task('_watch-compile-fixtures', callback =>
+  webpack(webpackFixturesConfig())
+    .watch(100, webpackCallback({
+      onReady: callback
+    }))
+)
+
 gulp.task('_watch-webpack-dev-server', callback => {
   const config = webpackFrontendConfig()
 
@@ -158,6 +172,14 @@ gulp.task('watch-migrate', callback =>
   runSequence(
     '_build-clean',
     '_watch-compile-migrate',
+    callback
+  )
+)
+
+gulp.task('watch-fixtures', callback =>
+  runSequence(
+    '_build-clean',
+    '_watch-compile-fixtures',
     callback
   )
 )

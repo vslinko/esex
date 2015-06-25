@@ -1,4 +1,7 @@
 export default {
+  bcrypt: {
+    rounds: process.env.BCRYPT_ROUNDS || 10
+  },
   database: {
     host: process.env.DATABASE_HOST || 'localhost',
     port: process.env.DATABASE_PORT || '2424',

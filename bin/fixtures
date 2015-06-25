@@ -1,0 +1,10 @@
+#!/bin/bash
+
+cd "$(dirname $0)/.."
+
+. ./bin/_lib.sh
+
+ensure_env_sh
+
+./node_modules/.bin/gulp _build-compile-fixtures >/dev/null
+./env.sh node ./.app/fixtures.js

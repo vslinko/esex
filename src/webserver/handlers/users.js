@@ -4,14 +4,24 @@ import applyTransaction from '../db/applyTransaction'
 import fulfillQuery from '../db/fulfillQuery'
 import validateResourceBySchema from '../utilities/validateResourceBySchema'
 import getParamsFromRequest from '../utilities/getParamsFromRequest'
+import {OP} from '../../utilities/acl'
 
 export async function indexHandler(request) {
   const {db} = request
+  const currentUser = request.user
 
-  const users = await db
+  if (!UserSchema.schemaAccessRule(UserSchema, currentUser, OP.GET)) {
+    return {
+      status: currentUser ? 403 : 401,
+      body: {data: null} // null-reasonable
+    }
+  }
+
+  const users = (await db
     .select()
     .from(UserSchema.type)
-    .all()
+    .all())
+    .filter(user => UserSchema.resourceAccessRule(user, currentUser, OP.GET))
 
   const body = await fulfillQuery(
     db,
@@ -26,12 +36,27 @@ export async function indexHandler(request) {
 
 export async function getHandler(request) {
   const {db, params: {id}} = request
+  const currentUser = request.user
+
+  if (!UserSchema.schemaAccessRule(UserSchema, currentUser, OP.GET)) {
+    return {
+      status: currentUser ? 403 : 401,
+      body: {data: null} // null-reasonable
+    }
+  }
 
   const user = await db
     .select()
     .from(UserSchema.type)
     .where({'@rid': id})
     .one()
+
+  if (!UserSchema.resourceAccessRule(user, currentUser, OP.GET)) {
+    return {
+      status: 403,
+      body: {data: null} // null-reasonable
+    }
+  }
 
   const body = await fulfillQuery(
     db,
@@ -47,6 +72,14 @@ export async function getHandler(request) {
 
 export async function postHandler(request) {
   const {db, body: {data}} = request
+  const currentUser = request.user
+
+  if (!UserSchema.schemaAccessRule(UserSchema, currentUser, OP.POST)) {
+    return {
+      status: currentUser ? 403 : 401,
+      body: {data: null} // null-reasonable
+    }
+  }
 
   if (!data) {
     return {
@@ -95,6 +128,14 @@ export async function postHandler(request) {
 
 export async function deleteHandler(request) {
   const {db, params: {id}} = request
+  const currentUser = request.user
+
+  if (!UserSchema.schemaAccessRule(UserSchema, currentUser, OP.DELETE)) {
+    return {
+      status: currentUser ? 403 : 401,
+      body: {data: null} // null-reasonable
+    }
+  }
 
   const user = await db
     .select()
@@ -105,6 +146,13 @@ export async function deleteHandler(request) {
   if (!user) {
     return {
       status: 404,
+      body: {data: null} // null-reasonable
+    }
+  }
+
+  if (!UserSchema.resourceAccessRule(user, currentUser, OP.DELETE)) {
+    return {
+      status: 403,
       body: {data: null} // null-reasonable
     }
   }
@@ -123,6 +171,14 @@ export async function deleteHandler(request) {
 
 export async function patchHandler(request) {
   const {db, params: {id}, body: {data}} = request
+  const currentUser = request.user
+
+  if (!UserSchema.schemaAccessRule(UserSchema, currentUser, OP.PATCH)) {
+    return {
+      status: currentUser ? 403 : 401,
+      body: {data: null} // null-reasonable
+    }
+  }
 
   const user = await db
     .select()
@@ -133,6 +189,13 @@ export async function patchHandler(request) {
   if (!user) {
     return {
       status: 404,
+      body: {data: null} // null-reasonable
+    }
+  }
+
+  if (!UserSchema.resourceAccessRule(user, currentUser, OP.PATCH)) {
+    return {
+      status: 403,
       body: {data: null} // null-reasonable
     }
   }

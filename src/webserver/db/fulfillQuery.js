@@ -21,6 +21,9 @@ function reduceOuts({schema, queryPath}, field) {
   } else if (relationship.throughEdge) {
     queryPath.push(`OUT('${relationship.throughEdge}')`)
 
+  } else if (relationship.reverseThroughEdge) {
+    queryPath.push(`IN('${relationship.reverseThroughEdge}')`)
+
   } else if (relationship.class) {
     queryPath.push(`OUTE('${relationship.class}')`)
 

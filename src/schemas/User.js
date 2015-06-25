@@ -2,6 +2,7 @@ import {constraints} from 'strulidator'
 import {merge} from 'ramda'
 import bcrypt from 'bcryptjs'
 import config from '../webserver/di/config' // TODO: fix this shit
+import {authorized} from '../utilities/acl'
 
 const {
   combineConstraints,
@@ -36,6 +37,8 @@ export default {
       throughEdge: 'UserOrder'
     }
   },
+  schemaAccessRule: authorized,
+  resourceAccessRule: authorized,
   normalize: user => {
     if (!user.attributes.password) {
       return user

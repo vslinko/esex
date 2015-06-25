@@ -15,14 +15,17 @@ async function fetchRelationshipDataThroughIn({db, relationship, type, id}) {
   return {type: relationship.class, id: prepareId(links[0].in)}
 }
 
-async function fetchRelationshipDataThroughEdge({db, relationship, type, id}) {
-  const links = await db.query(`SELECT OUT('${relationship.throughEdge}') FROM ${type} WHERE @rid = ${id}`)
+async function fetchRelationshipDataThroughEdge({db, relationship, type, id, reverse = false}) {
+  const edgeClass = reverse ? relationship.reverseThroughEdge : relationship.throughEdge
+  const fn = reverse ? 'IN' : 'OUT'
+
+  const links = await db.query(`SELECT ${fn}('${edgeClass}') FROM ${type} WHERE @rid = ${id}`)
 
   if (!links[0]) {
     return []
   }
 
-  return links[0].OUT.map(linkId => ({type: relationship.class, id: prepareId(linkId)}))
+  return links[0][fn].map(linkId => ({type: relationship.class, id: prepareId(linkId)}))
 }
 
 async function fetchRelationshipDataEdge({db, relationship, type, id}) {
@@ -42,6 +45,10 @@ async function fetchRelationshipData({db, relationship, type, id, field}) {
 
   if (relationship.throughEdge) {
     return await fetchRelationshipDataThroughEdge({db, relationship, type, id})
+  }
+
+  if (relationship.reverseThroughEdge) {
+    return await fetchRelationshipDataThroughEdge({db, relationship, type, id, reverse: true})
   }
 
   if (relationship.class) {

@@ -19,7 +19,11 @@ passport.use(
 
       const validPassword = await new Promise((resolve, reject) => {
         bcrypt.compare(password, user.password, (error, result) => {
-          error ? reject(error) : resolve(result)
+          if (error) {
+            reject(error)
+          } else {
+            resolve(result)
+          }
         })
       })
 

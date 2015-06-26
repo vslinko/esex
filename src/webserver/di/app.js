@@ -15,7 +15,7 @@ import cookieAuthMiddleware from './cookieAuthMiddleware'
 const app = express()
 
 app.use(morgan('combined'))
-app.disable('x-powered-by');
+app.disable('x-powered-by')
 
 // API
 

@@ -34,7 +34,7 @@ export function deauthorize() {
       return
     }
 
-    const response = await apiRequest('/xhr/logout', {
+    await apiRequest('/xhr/logout', {
       method: 'POST',
       headers: {
         'Authorization': `Bearer ${token}`

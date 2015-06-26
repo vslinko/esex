@@ -4,12 +4,10 @@ import {
   TOKEN
 } from './tokenConstants'
 
-const initialState = undefined
-
 function newToken(previousToken, {token}) {
   return token
 }
 
-export default createStore(initialState, {
+export default createStore(undefined, {
   [TOKEN]: newToken
 })

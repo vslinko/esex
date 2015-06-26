@@ -1,5 +1,3 @@
-import {ProvidePlugin} from 'webpack'
-
 import {mergeObjects, mergeArrays} from '../utilities'
 import config from '../config'
 import base from './base'

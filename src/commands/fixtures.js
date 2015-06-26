@@ -1,6 +1,5 @@
 import 'source-map-support/register'
 
-import Oriento from 'oriento'
 import orientoServer from '../webserver/di/orientoServer'
 import orientoDb from '../webserver/di/orientoDb'
 
@@ -36,7 +35,7 @@ async function main() {
     await cleanDatabase()
     await applyFixtures()
   } catch (error) {
-    console.log(error.stack)
+    console.log(error.stack) // eslint-disable-line no-console
   } finally {
     orientoServer.close()
   }

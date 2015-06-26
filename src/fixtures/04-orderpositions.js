@@ -1,4 +1,4 @@
-import {range, xprod} from 'ramda'
+import {xprod} from 'ramda'
 
 export default async function(db, {orders, items}) {
   const orderPositions = await* xprod(orders, items)

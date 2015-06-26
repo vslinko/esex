@@ -199,6 +199,7 @@ gulp.task('eslint', () =>
   gulp.src([
     'build/**/*.js',
     'src/**/*.js',
+    'test/**/*.js',
     'gulpfile.babel.js',
     'webpack.config.js'
   ])

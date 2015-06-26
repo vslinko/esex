@@ -1,7 +1,7 @@
 import apiRequest from '../../utilities/apiRequest'
 import getParamsFromRequest from '../utilities/getParamsFromRequest'
 
-async function loginHandler(request) {
+export async function loginHandler(request) {
   const {fields, include} = getParamsFromRequest(request)
 
   const response = await apiRequest('/api/v1/tokens/', {
@@ -25,7 +25,7 @@ async function loginHandler(request) {
   }
 }
 
-async function logoutHandler(request) {
+export async function logoutHandler(request) {
   const token = request.cookies.accessToken
 
   const response = await apiRequest(`/api/v1/tokens/?filter[hash]=${token}`, {

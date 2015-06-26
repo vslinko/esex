@@ -58,15 +58,17 @@ export function runTransition(url) {
 
     const {title, status, ...props} = await dispatch(transition(route.match || {}))
 
-    if (status === 404) {
+    if (status === 401) {
+      if (global.history) { // TODO: fix this shit
+        dispatch(navigateTo('/'))
+      }
+    } else if (status === 404) {
       return dispatch(runNotFoundTransition(url))
-    }
-
-    if (status === 500) {
+    } else if (status < 200 || status >= 300) {
       return dispatch(runErrorTransition(url, props))
+    } else {
+      dispatch(changePage(componentKey, props))
     }
-
-    dispatch(changePage(componentKey, props))
 
     return {url, title, status}
   }

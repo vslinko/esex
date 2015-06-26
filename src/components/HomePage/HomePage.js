@@ -1,19 +1,25 @@
 import createObservableComponent from 'react-observable'
-import {setCurrentUser} from '../../flux/currentUser/currentUserActions'
+import {fulfillTree} from '../../utilities/resourcesTree'
+import getCurrentUser from '../../utilities/getCurrentUser'
+import {defineSchema, attribute} from '../../utilities/resourcesTree'
 import bindAction from '../../utilities/bindAction'
+import preventEvent from '../../utilities/preventEvent'
+import {deauthorize} from '../../flux/token/tokenActions'
 import Link from '../Link'
+import SignIn from '../SignIn'
 
-function DumbHomePage({dispatcher, currentUser, onCurrentUserChange}) {
-  const currentUserLink = {
-    value: currentUser,
-    requestChange: onCurrentUserChange
-  }
+const currentUserSchema = defineSchema({
+  email: attribute
+})
 
+function DumbHomePage({dispatcher, currentUser, onSignOut}) {
   return (
     <div>
-      <h1>Hello {currentUser}!</h1>
+      <h1>Welcome</h1>
+      <SignIn dispatcher={dispatcher} />
       <div>
-        <input valueLink={currentUserLink} />
+        {currentUser && `You are signed in as ${currentUser.email}`}
+        {currentUser && <button onClick={preventEvent(onSignOut)}>Sign Out</button>}
       </div>
       <div>
         <Link dispatcher={dispatcher} href="/about">About</Link>
@@ -29,8 +35,15 @@ function HomePage({dispatcher}) {
   return dispatcher.observable
     .map(state => ({
       dispatcher,
-      currentUser: state.currentUser,
-      onCurrentUserChange: bindAction(dispatcher, setCurrentUser)
+      onSignOut: bindAction(dispatcher, deauthorize),
+      currentUser: fulfillTree(
+        state.resources,
+        getCurrentUser(
+          state.resources,
+          state.token
+        ),
+        currentUserSchema
+      )
     }))
     .map(DumbHomePage)
 }

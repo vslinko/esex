@@ -48,3 +48,19 @@ export async function postHandler(request) {
     body
   }
 }
+
+
+export async function deleteHandler(request) {
+  const {db, query: {filter: {hash}}} = request
+
+  const deletedCount = await db
+    .delete('VERTEX', 'AccessToken')
+    .where({hash})
+    .limit(1)
+    .scalar()
+
+  return {
+    status: deletedCount > 0 ? 200 : 404,
+    body: {data: null}
+  }
+}

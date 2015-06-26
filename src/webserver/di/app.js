@@ -1,43 +1,30 @@
 import express from 'express'
 import morgan from 'morgan'
 import bodyParser from 'body-parser'
+import cookieParser from 'cookie-parser'
 import orientoDbMiddleware from './orientoDbMiddleware'
-import passport from './passport'
 import wrapHandler from '../utilities/wrapHandler'
 import renderPage from '../utilities/renderPage'
 import config from './config'
 import handlers from '../handlers'
+import wrapPassportMiddleware from './wrapPassportMiddleware'
+import cookieAuthMiddleware from './cookieAuthMiddleware'
 
 // Setup
 
 const app = express()
 
 app.use(morgan('combined'))
+app.disable('x-powered-by');
 
 // API
-
-function wrapPassportMiddleware(name) {
-  return (request, response, next) => {
-    const middleware = passport.authenticate(name, {session: false}, (error, user) => {
-      if (error) {
-        return next(error)
-      }
-
-      if (user) {
-        request.user = user
-      }
-
-      next()
-    })
-
-    middleware(request, response, next)
-  }
-}
 
 app.use('/api/*', wrapPassportMiddleware('basic'))
 app.use('/api/*', wrapPassportMiddleware('bearer'))
 app.use('/api/*', bodyParser.json())
 app.use('/api/*', orientoDbMiddleware)
+
+app.use('/xhr/*', cookieParser())
 
 handlers
   .forEach(({method, route, handler}) => {
@@ -53,6 +40,9 @@ if (config.webserver.publicDir) {
     index: false
   }))
 }
+
+app.use(cookieParser())
+app.use(cookieAuthMiddleware)
 
 app.get('*', wrapHandler(renderPage))
 

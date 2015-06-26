@@ -7,6 +7,14 @@ function getErrorMetaInformation(error) {
     detail: error.stack
   }
 
+  if (error.responseStatus) {
+    errorMeta.status = error.responseStatus
+
+    if (error.responseStatus < 500) {
+      delete errorMeta.detail
+    }
+  }
+
   if (error instanceof ParametersError) {
     errorMeta.status = 400
   }
@@ -40,6 +48,7 @@ function getErrorMetaInformation(error) {
 export default function wrapHandler(handler) {
   return async (request, response) => {
     const isApiRequest = /^\/api\//.test(request.originalUrl)
+    const isAjaxRequest = /^\/xhr\//.test(request.originalUrl)
 
     let contentType
     let status = 200
@@ -47,6 +56,24 @@ export default function wrapHandler(handler) {
 
     try {
       const responseMeta = await handler(request)
+
+      if (responseMeta.location) {
+        response.location(responseMeta.location)
+      }
+
+      if (responseMeta.headers) {
+        Object.keys(responseMeta.headers)
+          .forEach(key => {
+            response.set(key, responseMeta.headers[key])
+          })
+      }
+
+      if (responseMeta.cookies) {
+        responseMeta.cookies
+          .forEach(({name, value, ...options}) => {
+            response.cookie(name, value, options)
+          })
+      }
 
       if (responseMeta.contentType) {
         contentType = responseMeta.contentType
@@ -64,12 +91,16 @@ export default function wrapHandler(handler) {
 
       status = errorMeta.status
 
-      if (isApiRequest) {
+      if (isApiRequest || isAjaxRequest) {
         body = {errors: [errorMeta]}
       } else {
         contentType = 'text/plain'
         body = errorMeta.detail || errorMeta.title
       }
+    }
+
+    if (!contentType && isAjaxRequest) {
+      contentType = 'application/json'
     }
 
     if (!contentType && isApiRequest) {
@@ -78,6 +109,10 @@ export default function wrapHandler(handler) {
 
     if (contentType) {
       response.header('Content-Type', contentType)
+    }
+
+    if (typeof body === 'number') {
+      body = String(body)
     }
 
     response.status(status)

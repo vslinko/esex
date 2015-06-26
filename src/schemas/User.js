@@ -1,6 +1,6 @@
 import {constraints} from 'strulidator'
 import {merge} from 'ramda'
-import bcrypt from 'bcryptjs'
+import bcrypt from 'bcryptjs' // TODO: use only in webserver environment
 import config from '../webserver/di/config' // TODO: fix this shit
 import {authorized} from '../utilities/acl'
 

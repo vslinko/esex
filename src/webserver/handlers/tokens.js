@@ -9,7 +9,7 @@ export async function postHandler(request) {
   if (!user) {
     return {
       status: 401,
-      body: {data: null}
+      body: {data: null} // null-reasonable
     }
   }
 
@@ -61,6 +61,6 @@ export async function deleteHandler(request) {
 
   return {
     status: deletedCount > 0 ? 200 : 404,
-    body: {data: null}
+    body: {data: null} // null-reasonable
   }
 }

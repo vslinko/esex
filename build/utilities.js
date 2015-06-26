@@ -1,3 +1,5 @@
+import childProcess from 'child_process'
+
 export const useIf = (condition, value) =>
   condition ? value : undefined
 
@@ -29,4 +31,17 @@ export const webpackCallback = ({onReady, onChange}) => {
       onChange()
     }
   }
+}
+
+export const runCommand = (command, args, callback) => {
+  const options = {
+    stdio: 'inherit'
+  }
+
+  childProcess.spawn(command, args, options)
+    .on('close', code =>
+      code > 0
+        ? callback(new Error(command + ' exited with code ' + code))
+        : callback()
+    )
 }

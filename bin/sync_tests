@@ -1,0 +1,67 @@
+#!/bin/bash
+
+cd "$(dirname $0)/.."
+
+files=$(find src -regex '.*.js')
+
+for file in $files; do
+  if [[ $file == "src/webserver/di/"* ]]; then
+    continue
+  fi
+  if [[ $file == "src/webserver/index.js" ]]; then
+    continue
+  fi
+  if [[ $file == "src/frontend/index.js" ]]; then
+    continue
+  fi
+  if [[ $file == *"/polyfills.js" ]]; then
+    continue
+  fi
+  if [[ $file == "src/migrations/"* ]]; then
+    continue
+  fi
+  if [[ $file == "src/fixtures/"* ]]; then
+    continue
+  fi
+  if [[ $file == "src/commands/"* ]]; then
+    continue
+  fi
+
+  test_file=${file/src/test}
+  test_file=${test_file/.js/Test.js}
+
+  test_dir=$(dirname $test_file)
+
+  var_name=$(basename $file)
+  var_name=${var_name/.js/}
+
+  test_name=${file/src\//}
+  test_name=${test_name/.js/}
+
+  levels=$(echo $test_dir | tr -cd / | wc -c)
+  path_to_file=""
+
+  while (( $levels >= 0 )); do
+    path_to_file="$path_to_file../"
+    ((levels--))
+  done
+
+  path_to_file="$path_to_file$file"
+  path_to_file=${path_to_file/.js/}
+
+  mkdir -p $test_dir
+
+  if [ -r $test_file ]; then
+    continue
+  fi
+
+  cat << END > $test_file
+import $var_name from '$path_to_file' // eslint-disable-line
+
+describe('$test_name', () => {
+  it('should work')
+})
+END
+
+  echo "Created $test_file"
+done

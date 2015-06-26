@@ -3,12 +3,13 @@ import webpack from 'webpack'
 import WebpackDevServer from 'webpack-dev-server'
 import nodemon from 'nodemon'
 import path from 'path'
+import fs from 'fs'
 
 import loadGulpPlugins from 'gulp-load-plugins'
 import runSequence from 'run-sequence'
 import del from 'del'
 
-import {webpackCallback} from './build/utilities'
+import {webpackCallback, runCommand} from './build/utilities'
 import config from './build/config'
 
 const webpackFrontendConfig = () => require('./build/webpack/frontend')
@@ -184,6 +185,14 @@ gulp.task('watch-fixtures', callback =>
   )
 )
 
+gulp.task('watch-karma', callback =>
+  runCommand(
+    './node_modules/.bin/karma',
+    ['start', '--log-level', 'debug', '--no-single-run'],
+    callback
+  )
+)
+
 /* ESLINT */
 
 gulp.task('eslint', () =>
@@ -198,8 +207,36 @@ gulp.task('eslint', () =>
     .pipe(plugins.eslint.failAfterError())
 )
 
+/* KARMA */
+
+gulp.task('_karma-clean', callback =>
+  del('.coverage', callback)
+)
+
+gulp.task('_karma-run', callback =>
+  runCommand(
+    './node_modules/.bin/karma',
+    ['start', '--log-level', 'debug'],
+    callback
+  )
+)
+
+gulp.task('_karma-hide-coverage', callback =>
+  fs.rename('coverage', '.coverage', callback)
+)
+
+gulp.task('karma', callback =>
+  runSequence(
+    '_karma-clean',
+    '_karma-run',
+    '_karma-hide-coverage',
+    callback
+  )
+)
+
 /* GLOBAL */
 
 gulp.task('lint', ['eslint'])
-gulp.task('clean', ['_build-clean'])
+gulp.task('test', ['karma'])
+gulp.task('clean', ['_build-clean', '_karma-clean'])
 gulp.task('default', ['start'])

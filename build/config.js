@@ -4,6 +4,7 @@ import fs from 'fs'
 const rootDirectory = path.join(__dirname, '..')
 const sourceDirectory = path.join(rootDirectory, 'src')
 const publicDirectory = path.join(rootDirectory, 'public')
+const testDirectory = path.join(rootDirectory, 'test')
 const destinationDirectory = path.join(rootDirectory, '.app')
 const destinationPublicDirectory = path.join(destinationDirectory, 'public')
 
@@ -33,6 +34,7 @@ export default {
   rootDirectory,
   sourceDirectory,
   publicDirectory,
+  testDirectory,
   destinationDirectory,
   destinationPublicDirectory,
 

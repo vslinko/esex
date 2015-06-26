@@ -1,4 +1,5 @@
 /.app/
+/.coverage/
 /node_modules/
 
 /env.sh

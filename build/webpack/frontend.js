@@ -26,6 +26,10 @@ export default mergeObjects(base, {
           test: /\.js$/,
           include: [config.sourceDirectory],
           loaders: ['react-hot-loader']
+        },
+        {
+          test: /\.css$/,
+          loaders: ['style', 'css']
         }
       ],
       base.module.loaders

@@ -5,6 +5,8 @@ import Application from '../components/Application'
 import createDispatcher from '../utilities/createDispatcher'
 import {popState} from '../flux/router/routerActions'
 
+import 'nprogress/nprogress.css'
+
 function bootstrapDispatcher(initialState) {
   const dispatcher = createDispatcher(initialState)
 

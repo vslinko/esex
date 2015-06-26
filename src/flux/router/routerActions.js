@@ -1,5 +1,6 @@
 import routing, {notFound as notFoundRoute, error as errorRoute} from '../../config/routing'
 import * as transitions from '../transition/transitionActions'
+import progressIndicator from '../../utilities/progressIndicator'
 import matchRoutePattern from 'match-route-pattern'
 
 import {
@@ -76,10 +77,12 @@ export function runTransition(url) {
 
 export function navigateTo(url) {
   return async dispatch => {
-    const {title} = await dispatch(runTransition(url))
+    await progressIndicator(async () => {
+      const {title} = await dispatch(runTransition(url))
 
-    document.title = title
-    history.pushState({url, title}, title, url)
+      document.title = title
+      history.pushState({url, title}, title, url)
+    })
   }
 }
 
@@ -94,6 +97,8 @@ export function popState(event) {
 
     document.title = title
 
-    await dispatch(runTransition(url))
+    await progressIndicator(async () => {
+      await dispatch(runTransition(url))
+    })
   }
 }

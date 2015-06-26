@@ -34,6 +34,7 @@
     "karma": "gulp karma",
     "lint": "gulp lint",
     "start": "gulp start",
+    "sync-tests": "./bin/sync_tests",
     "test": "gulp test",
     "watch-fixtures": "gulp watch-fixtures",
     "watch-frontend": "gulp watch-frontend",

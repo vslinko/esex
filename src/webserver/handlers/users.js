@@ -4,7 +4,7 @@ import applyTransaction from '../db/applyTransaction'
 import fulfillQuery from '../db/fulfillQuery'
 import validateResourceBySchema from '../utilities/validateResourceBySchema'
 import getParamsFromRequest from '../utilities/getParamsFromRequest'
-import {OP} from '../../utilities/acl'
+import {OP} from 'access-rule'
 
 export async function indexHandler(request) {
   const {db} = request

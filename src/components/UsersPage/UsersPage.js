@@ -1,5 +1,5 @@
 import createObservableComponent from 'react-observable'
-import {fulfillTree} from '../../utilities/resourcesTree'
+import {fulfillTreeSchema} from 'components-data-tree'
 import User, {schema as userSchema} from './User'
 
 function DumbUsersPage({users}) {
@@ -14,7 +14,7 @@ function UsersPage({dispatcher, apiResponse}) {
   return dispatcher.observable
     .map(state => ({
       dispatcher,
-      users: fulfillTree(
+      users: fulfillTreeSchema(
         state.resources,
         apiResponse.data,
         userSchema

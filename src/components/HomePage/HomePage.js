@@ -1,7 +1,6 @@
 import createObservableComponent from 'react-observable'
-import {fulfillTree} from '../../utilities/resourcesTree'
+import {fulfillTreeSchema, defineSchema, attribute} from 'components-data-tree'
 import getCurrentUser from '../../utilities/getCurrentUser'
-import {defineSchema, attribute} from '../../utilities/resourcesTree'
 import bindAction from '../../utilities/bindAction'
 import preventEvent from '../../utilities/preventEvent'
 import {deauthorize} from '../../flux/token/tokenActions'
@@ -36,7 +35,7 @@ function HomePage({dispatcher}) {
     .map(state => ({
       dispatcher,
       onSignOut: bindAction(dispatcher, deauthorize),
-      currentUser: fulfillTree(
+      currentUser: fulfillTreeSchema(
         state.resources,
         getCurrentUser(
           state.resources,

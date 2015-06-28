@@ -1,5 +1,5 @@
 import createObservableComponent from 'react-observable'
-import {defineSchema, attribute} from '../../utilities/resourcesTree'
+import {defineSchema, attribute} from 'components-data-tree'
 
 export const schema = defineSchema({
   id: attribute,

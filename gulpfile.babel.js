@@ -3,7 +3,7 @@ import webpack from 'webpack'
 import WebpackDevServer from 'webpack-dev-server'
 import nodemon from 'nodemon'
 import path from 'path'
-import fs from 'fs'
+import fs from 'fs-promise'
 
 import loadGulpPlugins from 'gulp-load-plugins'
 import runSequence from 'run-sequence'
@@ -211,7 +211,7 @@ gulp.task('eslint', () =>
 /* KARMA */
 
 gulp.task('_karma-clean', callback =>
-  del('.coverage', callback)
+  del('.test', callback)
 )
 
 gulp.task('_karma-run', callback =>
@@ -222,15 +222,19 @@ gulp.task('_karma-run', callback =>
   )
 )
 
-gulp.task('_karma-hide-coverage', callback =>
-  fs.rename('coverage', '.coverage', callback)
-)
+gulp.task('_karma-hide', async () => {
+  await fs.mkdir('.test')
+  await* [
+    fs.rename('coverage', '.test/coverage'),
+    fs.rename('test-results.xml', '.test/test-results.xml')
+  ]
+})
 
 gulp.task('karma', callback =>
   runSequence(
     '_karma-clean',
     '_karma-run',
-    '_karma-hide-coverage',
+    '_karma-hide',
     callback
   )
 )

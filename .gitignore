@@ -1,5 +1,5 @@
 /.app/
-/.coverage/
+/.test/
 /node_modules/
 
 /env.sh

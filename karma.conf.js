@@ -17,7 +17,7 @@ module.exports = function(config) {
       'test/**/*Test.js': ['webpack']
     },
 
-    reporters: ['progress', 'coverage'],
+    reporters: ['progress', 'junit', 'coverage'],
 
     browsers: ['Chrome'],
 

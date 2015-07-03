@@ -1,5 +1,12 @@
-import resourcesActions from '../../../src/flux/resources/resourcesActions' // eslint-disable-line
+import {mergeResources} from '../../../src/flux/resources/resourcesActions' // eslint-disable-line
 
 describe('flux/resources/resourcesActions', () => {
-  it('should work')
+  it('should return action', () => {
+    const expected = {
+      type: 'RESOURCES_UPDATE',
+      resources: {test: 'test'}
+    }
+
+    assert.deepEqual(expected, mergeResources({test: 'test'}))
+  })
 })

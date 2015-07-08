@@ -84,6 +84,7 @@
     "gulp": "3.9.0",
     "gulp-eslint": "0.14.0",
     "gulp-load-plugins": "1.0.0-rc.1",
+    "inject-loader": "2.0.0",
     "isparta-loader": "0.2.0",
     "karma": "0.12.37",
     "karma-chrome-launcher": "0.2.0",

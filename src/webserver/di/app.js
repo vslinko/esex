@@ -17,6 +17,12 @@ const app = express()
 app.use(morgan('combined'))
 app.disable('x-powered-by')
 
+// graphql
+
+app.use('/_graphql', wrapPassportMiddleware('basic'))
+app.use('/_graphql', wrapPassportMiddleware('bearer'))
+app.use('/_graphql', bodyParser.text())
+
 // API
 
 app.use('/api/*', wrapPassportMiddleware('basic'))

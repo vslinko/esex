@@ -18,7 +18,9 @@ passport.use(
       }
 
       const validPassword = await new Promise((resolve, reject) => {
-        bcrypt.compare(password, user.password, (error, result) => {
+        const hash = user.password.replace(/^bcrypt:/, '')
+
+        bcrypt.compare(password, hash, (error, result) => {
           if (error) {
             reject(error)
           } else {

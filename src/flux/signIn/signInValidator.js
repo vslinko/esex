@@ -1,9 +1,6 @@
-import {constraints} from 'strulidator'
-import User from '../../schemas/User'
+// import {constraints} from 'strulidator'
+import userValidator from '../../validators/userValidator'
 
-const {createObjectConstraint} = constraints
+// const {createObjectConstraint} = constraints
 
-export default createObjectConstraint({
-  email: User.attributes.email,
-  password: User.attributes.password
-})
+export default userValidator

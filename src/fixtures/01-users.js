@@ -3,6 +3,7 @@ import bcrypt from 'bcryptjs'
 import config from '../webserver/di/config'
 
 export default async function(db) {
+  // TODO: fix password save
   const users = await* range(0, 3)
     .map(i => {
       const email = i + '@example.com'

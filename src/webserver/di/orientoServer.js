@@ -5,5 +5,8 @@ export default oriento({
   host: config.database.host,
   port: config.database.port,
   username: config.database.user,
-  password: config.database.password
+  password: config.database.password,
+  logger: {
+    // debug: ::console.log
+  }
 })

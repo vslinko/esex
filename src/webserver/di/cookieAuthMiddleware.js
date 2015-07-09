@@ -1,5 +1,5 @@
 import orientoDb from './orientoDb'
-import mapObjectToResource from '../db/mapObjectToResource'
+// import mapObjectToResource from '../db/mapObjectToResource'
 
 export default async function cookieAuthMiddleware(request, response, next) {
   if (!request.cookies.accessToken) {
@@ -17,8 +17,6 @@ export default async function cookieAuthMiddleware(request, response, next) {
       return
     }
 
-    const tokenResource = await mapObjectToResource(orientoDb, token)
-
     if (tokenResource.relationships.user.data.length < 1) {
       return
     }
@@ -35,10 +33,8 @@ export default async function cookieAuthMiddleware(request, response, next) {
       return
     }
 
-    const userResource = await mapObjectToResource(orientoDb, user)
-
-    request.tokenResource = tokenResource
-    request.userResource = userResource
+    request.token = token
+    request.user = user
   } catch (error) {
     return next(error)
   }

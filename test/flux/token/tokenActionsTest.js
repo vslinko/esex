@@ -1,24 +1,26 @@
-// import {setToken, authorize} from '../../../src/flux/token/tokenActions' // eslint-disable-line
-
-const mockApiRequest = sinon.spy()
 const apiRequestInjector = require('inject!../../../src/flux/token/tokenActions')
 
 describe('flux/token/tokenActions', () => {
-  let tokenActions;
+  let tokenActions, mockApiRequest;
 
   beforeEach(() => {
+    mockApiRequest = sinon.spy()
     tokenActions = apiRequestInjector({
       '../../utilities/apiRequest': mockApiRequest
     })
-    console.log(tokenActions)
   })
 
   it('should return a token object', () => {
-    assert.deepEqual({type:'TOKEN', token: 'token'}, setToken('token'))
+    assert.deepEqual({type:'TOKEN', token: 'token'}, tokenActions.setToken('token'))
   })
 
-  it('should', () => {
-    const res = authorize('test', 'test')()
+  it('should invoke login url', () => {
+    const res = tokenActions.authorize('test', 'test')()
     assert.equal(mockApiRequest.getCall(0).args[0], '/xhr/login?include=user')
+  })
+
+  it('should invoke logout url', () => {
+    const res = tokenActions.deauthorize()(()=>{}, ()=>{ return {token: 'token'} })
+    assert.equal(mockApiRequest.getCall(0).args[0], '/xhr/logout')
   })
 })
